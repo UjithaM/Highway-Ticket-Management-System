@@ -3,7 +3,6 @@ package com.ujitha.user_service.controller;
 import com.ujitha.user_service.dto.UserDTO;
 import com.ujitha.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -71,4 +70,34 @@ public class UserController {
                     .body("Internal server error | Unable to fetch user.\nMore Details\n" + exception);
         }
     }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable String userId, @Validated @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+        logger.info("Updating user with ID: {}", userId);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+        }
+        try {
+            userService.updateUser(userId, userDTO);
+            return ResponseEntity.ok("User updated successfully !");
+        } catch (Exception exception) {
+            logger.error("Error updating user: ", exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error | Unable to update user.\nMore Details\n" + exception);
+        }
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+        logger.info("Deleting user with ID: {}", userId);
+        try {
+            userService.deleteUser(userId);
+            return ResponseEntity.ok("User deleted successfully !");
+        } catch (Exception exception) {
+            logger.error("Error deleting user: ", exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error | Unable to delete user.\nMore Details\n" + exception);
+        }
+    }
+
 }
