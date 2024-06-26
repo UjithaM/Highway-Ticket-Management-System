@@ -20,6 +20,9 @@ public class UserServiceIMPL implements UserService {
 
     @Override
     public UserDTO saveUser(UserDTO userDTO) {
+        long userCount = userRepo.count();
+        String userId = String.format("U%04d", userCount + 1);
+        userDTO.setId(userId);
         return mapping.toUserDto(userRepo.save(mapping.toUserEntity(userDTO)));
     }
 
