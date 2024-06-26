@@ -58,4 +58,17 @@ public class UserController {
                     .body("Internal server error | Unable to fetch Users.\nMore Details\n" + exception);
         }
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable String userId) {
+        logger.info("Fetching user with ID: {}", userId);
+        try {
+            UserDTO userDTO = userService.getSelectedUser(userId);
+            return ResponseEntity.ok(userDTO);
+        } catch (Exception exception) {
+            logger.error("Error fetching user by ID: ", exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error | Unable to fetch user.\nMore Details\n" + exception);
+        }
+    }
 }
