@@ -60,4 +60,9 @@ public class UserServiceIMPL implements UserService {
         }
 
     }
+
+    @Override
+    public boolean isUserExists(String userId) {
+        return userRepo.existsById(userId);
+    }
 }
