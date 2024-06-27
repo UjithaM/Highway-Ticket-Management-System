@@ -10,4 +10,5 @@ public interface UserService {
     UserDTO getSelectedUser(String userId);
     List<UserDTO> getAllUser();
     void updateUser(String userId,UserDTO userDTO);
+    boolean isUserExists(String userId);
 }
