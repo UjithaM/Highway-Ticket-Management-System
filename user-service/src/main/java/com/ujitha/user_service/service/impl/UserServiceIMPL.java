@@ -5,6 +5,7 @@ import com.ujitha.user_service.dto.UserDTO;
 import com.ujitha.user_service.entity.UserEntity;
 import com.ujitha.user_service.service.UserService;
 import com.ujitha.user_service.util.Mapping;
+import com.ujitha.user_service.util.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,12 +29,17 @@ public class UserServiceIMPL implements UserService {
 
     @Override
     public void deleteUser(String userId) {
-        userRepo.deleteById(userId);
+        if (userRepo.existsById(userId)){
+            userRepo.deleteById(userId);
+        } else throw new NotFoundException("User not found" + userId);
     }
 
     @Override
     public UserDTO getSelectedUser(String userId) {
-        return mapping.toUserDto(userRepo.findById(userId).orElse(null));
+        UserEntity userEntity = userRepo.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found" + userId));
+
+        return mapping.toUserDto(userEntity);
     }
 
     @Override
@@ -43,8 +49,8 @@ public class UserServiceIMPL implements UserService {
 
     @Override
     public void updateUser(String userId, UserDTO userDTO) {
-        UserEntity userEntity = userRepo.findById(userId).orElse(null);
-
+        UserEntity userEntity = userRepo.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found" + userId));
         if (userEntity != null) {
             userEntity.setFirstName(userDTO.getFirstName());
             userEntity.setLastName(userDTO.getLastName());
