@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "vehicle")
+@Table(name = "ticket")
 @Entity
 public class TicketEntity implements SuperEntity{
     @Id
