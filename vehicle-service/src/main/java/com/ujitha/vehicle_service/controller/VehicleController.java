@@ -89,4 +89,23 @@ public class VehicleController {
                     .body("Internal server error | Unable to delete Vehicle by ID: " + vehicleId + ".\nMore Details\n" + exception);
         }
     }
+
+    @PutMapping("/{vehicleId}")
+    public ResponseEntity<?> updateVehicle(@PathVariable String vehicleId, @Validated @RequestBody VehicleDTO vehicleDTO, BindingResult bindingResult) {
+        logger.info("Updating Vehicle by ID: " + vehicleId);
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+        }
+        try {
+            if (!userServiceClient.isUserExists(vehicleDTO.getUserId())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found with ID: " + vehicleDTO.getUserId());
+            }
+            vehicleService.updateVehicle(vehicleId, vehicleDTO);
+            return ResponseEntity.ok("Vehicle updated successfully");
+        } catch (Exception exception) {
+            logger.error("Error updating Vehicle by ID: " + vehicleId, exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error | Unable to update Vehicle by ID: " + vehicleId + ".\nMore Details\n" + exception);
+        }
+    }
 }
