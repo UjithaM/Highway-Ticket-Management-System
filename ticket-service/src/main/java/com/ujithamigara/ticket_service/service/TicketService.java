@@ -12,4 +12,5 @@ public interface TicketService {
     void updateTicket(String ticketId,TicketDTO ticketDTO);
     List<TicketDTO> getTicketByUserId(String userId);
     List<TicketDTO> getTicketByVehicleId(String vehicleId);
+    boolean isTicketExists(String ticketId);
 }
