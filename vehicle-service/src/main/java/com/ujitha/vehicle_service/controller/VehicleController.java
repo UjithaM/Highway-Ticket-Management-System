@@ -66,7 +66,7 @@ public class VehicleController {
 
     @GetMapping("/{vehicleId}")
     public ResponseEntity<?> getVehicle(@PathVariable String vehicleId) {
-        logger.info("Fetching Vehicle by ID: " + vehicleId);
+        logger.info("Fetching Vehicle by ID: {}", vehicleId);
         try {
             VehicleDTO vehicleDTO = vehicleService.getSelectedVehicle(vehicleId);
             return ResponseEntity.ok(vehicleDTO);
@@ -79,7 +79,7 @@ public class VehicleController {
 
     @DeleteMapping("/{vehicleId}")
     public ResponseEntity<?> deleteVehicle(@PathVariable String vehicleId) {
-        logger.info("Deleting Vehicle by ID: " + vehicleId);
+        logger.info("Deleting Vehicle by ID: {}", vehicleId);
         try {
             vehicleService.deleteVehicle(vehicleId);
             return ResponseEntity.ok("Vehicle deleted successfully");
@@ -92,7 +92,7 @@ public class VehicleController {
 
     @PutMapping("/{vehicleId}")
     public ResponseEntity<?> updateVehicle(@PathVariable String vehicleId, @Validated @RequestBody VehicleDTO vehicleDTO, BindingResult bindingResult) {
-        logger.info("Updating Vehicle by ID: " + vehicleId);
+        logger.info("Updating Vehicle by ID: {}", vehicleId);
         if (bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getFieldErrors().get(0).getDefaultMessage());
         }
@@ -103,7 +103,7 @@ public class VehicleController {
             vehicleService.updateVehicle(vehicleId, vehicleDTO);
             return ResponseEntity.ok("Vehicle updated successfully");
         } catch (Exception exception) {
-            logger.error("Error updating Vehicle by ID: " + vehicleId, exception);
+            logger.error("Error updating Vehicle by ID: {}", vehicleId, exception);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Internal server error | Unable to update Vehicle by ID: " + vehicleId + ".\nMore Details\n" + exception);
         }
