@@ -108,4 +108,30 @@ public class VehicleController {
                     .body("Internal server error | Unable to update Vehicle by ID: " + vehicleId + ".\nMore Details\n" + exception);
         }
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getVehicleByUserId(@PathVariable String userId) {
+        logger.info("Fetching Vehicles by User ID: {}", userId);
+        try {
+            List<VehicleDTO> vehicleDTOList = vehicleService.getVehicleByUserId(userId);
+            return ResponseEntity.ok(vehicleDTOList);
+        } catch (Exception exception) {
+            logger.error("Error fetching Vehicles by User ID: {}", userId, exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error | Unable to fetch Vehicles by User ID: " + userId + ".\nMore Details\n" + exception);
+        }
+    }
+
+    @GetMapping("/exists/{vehicleId}")
+    public ResponseEntity<?> isVehicleExists(@PathVariable String vehicleId) {
+        logger.info("Checking Vehicle exists by ID: {}", vehicleId);
+        try {
+            boolean isVehicleExists = vehicleService.isVehicleExists(vehicleId);
+            return ResponseEntity.ok(isVehicleExists);
+        } catch (Exception exception) {
+            logger.error("Error checking Vehicle exists by ID: {}", vehicleId, exception);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error | Unable to check Vehicle exists by ID: " + vehicleId + ".\nMore Details\n" + exception);
+        }
+    }
 }
