@@ -1,6 +1,7 @@
 package com.ujithamigara.ticket_service.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Date;
 @Data
 public class TicketDTO {
     private String ticketId;
-    @NotBlank(message = "Ticket Issue Date is mandatory")
+    @NotNull(message = "Ticket issue date cannot be null")
     private Date ticketIssueDate;
     @NotBlank(message = "Ticket Status is mandatory")
     private String ticketStatus;
